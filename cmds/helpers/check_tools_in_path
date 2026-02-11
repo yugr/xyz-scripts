@@ -1,0 +1,3 @@
+#!/bin/sh
+set -eu
+which dcli >/dev/null

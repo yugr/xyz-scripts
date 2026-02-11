@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+CORE=$(get_target_core $1)
+case "$CORE" in
+R2[12] | S[12] | Q8 | P16)
+  exit 0
+  ;;
+*)
+  exit 1
+  ;;
+esac

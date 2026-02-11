@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -eu
+
+if test -z "${XYZ_BATCH_MODE:-}"; then
+  msg="Bash $$: ${1:-done}"
+  msg $USER "$msg"
+  rundll32 user32.dll,MessageBeep
+fi

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+source set_paths
+
+if test "${1:-}" = tfs; then
+  check_tfs_tools
+  cat <<EOF
+Your current TFS tasks:
+EOF
+  # Silly tfpt does not take server address
+  (cd $XYZ_QA_COMPILER && tfpt query 'XYZ_DEV\public\My Work Items' >&2)
+else
+  cat <<EOF
+`(ls -1 $XYZ_TFS_ROOT; ls -1 $XYZ_WDIR_ROOT | grep -v Archive; ls -1 $XYZ_INSTALL_ROOT) | sort -u | sed 's/^/  /'`
+EOF
+fi
+

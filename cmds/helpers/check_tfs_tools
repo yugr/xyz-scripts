@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+STATUS=0
+
+if ! which tf > /dev/null 2>&1; then
+  echo >&2 "error: tf.exe missing in PATH"
+  STATUS=1
+fi
+
+if ! which tfpt > /dev/null 2>&1; then
+  echo >&2 "error: tfpt.exe missing in PATH (you can install them from https://marketplace.visualstudio.com/items?itemName=MartinWoodward.TeamFoundationServerPowerToolsDecember2011 )"
+  STATUS=1
+fi
+
+exit $STATUS

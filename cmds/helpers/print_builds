@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -eu
+source set_paths
+
+ls -1 $XYZ_XTS_ROOT/Q4/builds | grep '^v' | sed 's/^v//'
+

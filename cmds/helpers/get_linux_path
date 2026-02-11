@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -eu
+
+case $1 in
+  /cygdrive/q/*)
+    echo $1 | sed 's!\/cygdrive\/q\/!/projects/toolsqa/!'
+    ;;
+  /cygdrive/y/*)
+    echo $1 | sed 's!\/cygdrive\/y\/!/projects/XTS/!'
+    ;;
+  *)
+  echo >&2 "$(basename $0): invalid path $1"
+  exit 1
+esac
+

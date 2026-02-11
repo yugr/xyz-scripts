@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -eu
+source set_paths
+
+check_task_set
+
+test -f $XYZ_LLVM_BUILD/build.ninja

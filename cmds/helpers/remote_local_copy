@@ -1,0 +1,16 @@
+#/bin/sh
+# Fast copy from remote server
+
+set -eu
+
+SRV=tools-srv4
+
+# Chdir necessary to inform Linux of recently created folders
+D=$(get_linux_path $1)
+BASE=$(basename $D)
+ssh -o 'BatchMode yes' $SRV "(rm -f ~/$BASE-$$.tgz && pushd $(dirname $D) >& /dev/null && tar czf ~/$BASE-$$.tgz $BASE && cat ~/$BASE-$$.tgz && rm ~/$BASE-$$.tgz) || (echo >&2 'COPY FAILED' && exit 1)" | tar xzf -
+
+# TODO: experiment with
+# * setting GZIP to -1 ... -9
+# * using "cmd /c copy" rather than pipes
+

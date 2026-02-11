@@ -1,0 +1,72 @@
+if test $XYZ_ABI = ELF && ! is_llvm_task $XYZ_TASK; then
+  echo >&2 "error: ELF XYZ_ABI not supported by Open64 tools"
+  exit 1
+fi
+
+XYZTOOLBOX=$XYZ_INSTALL_ROOT/$XYZ_TASK/$XYZ_TARGET
+NEW_PATH=$(remove_tools_from_path)
+
+COFF_DIR=$XYZ_INSTALL_ROOT/$XYZ_TASK/$XYZ_TARGET/$(xyz_dir $XYZ_TASK $XYZ_CORE)
+ELF_DIR=$XYZ_INSTALL_ROOT/$XYZ_TASK/$XYZ_TARGET/xyztools/bin
+
+if is_llvm_task $XYZ_TASK; then
+  XYZ_INSTALL=$ELF_DIR
+else
+  XYZ_INSTALL=$COFF_DIR
+fi
+
+# LLVM compiler is installed to xyztools/bin, outside of XYZ-XYZ.
+# For COFF targets we need to add XYZ-XYZ to PATH as well.
+if test $XYZ_ABI = COFF -a $XYZ_INSTALL != $COFF_DIR; then
+  TOOLS_PATH=$XYZ_INSTALL:$COFF_DIR
+else
+  TOOLS_PATH=$XYZ_INSTALL
+fi
+
+# Both COFF and ELF need this to be set to run simulator
+TOOLS_VAR=$(get_tools_var $XYZ_CORE)
+cat <<EOF
+  export $TOOLS_VAR=\$(cygpath -w $XYZ_INSTALL) ;
+EOF
+
+# Some cores want more variables
+case $XYZ_CORE in
+P12)
+  cat <<EOF
+export XYZP12TOOLS=\$(cygpath -w $XYZ_INSTALL) ;
+EOF
+  ;;
+Q6)
+  cat <<EOF
+export XYZQ6TOOLS=\$(cygpath -w $XYZ_INSTALL) ;
+export Q6TOOLS=\$(cygpath -w $XYZ_INSTALL) ;
+EOF
+  ;;
+esac
+
+cat <<EOF
+export XYZTOOLBOX=$XYZTOOLBOX ;
+export PATH="$TOOLS_PATH:$NEW_PATH" ;
+export XYZ_INSTALL=$XYZ_INSTALL ;
+EOF
+
+print_shell_ps "$XYZ_TASK $XYZ_CORE-$XYZ_ABI "
+
+cat <<EOF
+echo "Prepared full environment for target $XYZ_TARGET" ;
+EOF
+
+check_app_dups() {
+  n=$(which -a $1 2>/dev/null | wc -l) 
+  if test $n -gt 1; then
+    echo >&2 "warning: more than one $1 in PATH"
+  fi
+}
+
+# Sanity checks
+if ! test -d "$XYZ_INSTALL"; then
+  echo >&2 "warning: missing tools in $XYZ_INSTALL !"
+else
+  check_app_dups dcli
+  check_app_dups clang
+fi

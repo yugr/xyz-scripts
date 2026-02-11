@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -eu
+
+source colors
+
+for d in $XYZ_LLVM_SOURCE/*; do
+  if test -d "$d"/.git; then
+    BRANCH=$(cd $d && git rev-parse --abbrev-ref HEAD | tr -d '\n')
+    if test "${1:-}" = pretty -a $BRANCH != develop; then
+      # Cygwin does not seem to support colors
+      BRANCH="<<<$BRANCH>>>"
+    fi
+    HASH=$(cd $d && git rev-parse HEAD | tr -d '\n')
+    echo "$d $BRANCH $HASH"
+  fi
+done

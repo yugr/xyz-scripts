@@ -1,0 +1,3 @@
+#!/bin/sh
+set -eu
+tf history . /r /collection:http://codefront:8080/tfs/defaultcollection /noprompt /stopafter:1 /version:W

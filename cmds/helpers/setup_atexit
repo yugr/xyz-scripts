@@ -1,0 +1,5 @@
+if test -z "${XYZ_QUIET:-}" -a -n "${TRAP_NOTIFY:-}"; then
+  trap "${TRAP_CMD:-true}; notify" EXIT
+elif test -n "${TRAP_CMD:-}"; then
+  trap "$TRAP_CMD" EXIT
+fi

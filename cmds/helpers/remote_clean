@@ -1,0 +1,20 @@
+#/bin/sh
+# Fast clean through remote server
+
+set -eu
+
+SRV=tools-srv4
+
+D=$1
+
+LINUX_D=$(get_linux_path $D)
+
+if test -z $D; then
+  echo >&2 "$(basename $0): empty argument"
+  exit 1
+fi
+
+# Chdir necessary to inform Linux of recently created folders.
+# "|| true" needed because of tcsh shittiness...
+ssh -o 'BatchMode yes' $SRV "cd $LINUX_D && rm -rf * || true"
+

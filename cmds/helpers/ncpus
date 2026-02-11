@@ -1,0 +1,12 @@
+#!/bin/sh
+
+set -eu
+
+CPU=$(grep -c '^processor' /proc/cpuinfo)
+
+# Leave something to user
+if test $CPU -gt 1; then
+  CPU=$((CPU - 1))
+fi
+
+echo $CPU

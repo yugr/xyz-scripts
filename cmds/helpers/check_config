@@ -1,0 +1,16 @@
+#!/bin/sh
+
+set -eu
+
+if is_llvm_task $XYZ_TASK && test $1 = RelWithDebInfo -o $1 = MinSizeRel; then
+  exit 0
+fi
+
+case $1 in
+Release | Debug)
+  ;;
+*)
+  echo >&2 "error: unexpected config $1 (valid configs are $(get_config))"
+  exit 1
+esac
+

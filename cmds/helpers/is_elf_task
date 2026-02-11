@@ -1,0 +1,4 @@
+#!/bin/sh
+set -eu
+source set_paths
+is_llvm_task $1 || (ls -1 $XYZ_INSTALL_ROOT/$1 | grep -q ELF)

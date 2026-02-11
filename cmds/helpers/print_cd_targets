@@ -1,0 +1,10 @@
+#!/bin/sh
+set -eu
+# Extract possible names from case statement inside cd.sh
+grep '^[^(*]\+)$' $(dirname $0)/get_sym_dir \
+  | tr ')|\n' ' ' \
+  | if test "${1:-}" = pretty; then
+      sed 's/ \+/ /g' | tr ' ' '\n' | sed 's/^/  /g'
+    else
+      tr '();' '   '
+    fi

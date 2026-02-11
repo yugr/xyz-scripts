@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -eu
+
+CORE=$(get_core $1)
+
+ABI=
+if echo $1 | grep -q -- -; then
+  ABI=$(echo ${1#*-} | tr 'a-z' 'A-Z')
+fi
+
+if test -n "$ABI"; then
+  case "${ABI:-}" in
+  COFF | ELF)
+    ;;
+  *)
+    ABI=
+    ;;
+  esac
+elif is_elf_core "$CORE"; then
+  ABI=ELF
+elif is_coff_core "$CORE"; then
+  ABI=COFF
+fi
+
+echo $ABI

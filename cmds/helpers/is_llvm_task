@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -eu
+source set_paths
+
+if test -d $XYZ_LLVM_ROOT/"$1"; then
+  exit 0
+fi
+
+(echo $XYZ_INSTALL_ROOT/$1/*/xyztools/bin/clang.exe | grep -qv '\*') \
+  || (echo $XYZ_INSTALL_ROOT/$1/*/xyztools/bin/xyz-elf-as.exe | grep -qv '\*')

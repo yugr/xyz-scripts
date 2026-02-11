@@ -1,0 +1,19 @@
+#!/bin/sh
+set -eu
+
+count=$(ls -1 "$1" | grep "$2" | wc -l)
+case $count in
+0)
+  echo >&2 "No file matching pattern '$2' in $1"
+  exit 1
+  ;;
+1)
+  # Do nothing
+  ;;
+*)
+  echo >&2 "More than one file matches pattern '$2' in $1"
+  exit 1
+  ;;
+esac
+
+ls -1 "$1" | grep "$2"

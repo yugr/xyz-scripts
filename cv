@@ -1,0 +1,121 @@
+#!/bin/bash -eu
+
+# This is a simple automation tools for common tasks that we do in XYZ.
+# To use, install Cygwin and TFPT and add tf.exe and tfpt.exe to system PATH.
+# Run `source cv init' from within Cygwin and start using!
+#
+# Installation: add to .bashrc:
+#   PATH=$PATH:$HOME/xyz-scripts
+#   source cv init
+#   source $HOME/xyz-scripts/cmds/install-auto-complete.sh DODODO
+#
+# TODO:
+# * set-tools
+# * autobuild (including LLVM)
+# * monitor passed jobs
+# * resched XTS tasks to highest free prio
+# * check that cmd.exe works e.g. not intercepted by Msys (or use std. /cygdrive/c/Windows/system32/cmd)
+
+if test -z "${1:-}" -o "${1:-}" = help -a -z "${2:-}"; then
+  cat <<EOF
+Usage: cv CMD [ARGS]...
+A top-level driver for set of scripts to automate routine development activities in XYZ.
+
+Available commands:
+  help                  - print this message and exit
+
+  info                  - show info about current task
+  cd                    - chdir to one of task-related folders
+  synch                 - synch TFS location
+  tab                   - open new Cygwin window and copy settings (task, core) from current
+  diff-tasks            - compare two tasks
+  vim (v)               - open one of task-related file
+
+  create-task           - create necessary files for working on a task (TFS project, install dir, work dir, etc.)
+  remove-task           - remove files related to task
+  set-task (s)          - setup environment for working on task
+  unset-task (u)        - reset environment
+
+  set-target (st),
+  set-core (sc)         - set active target
+  set-branch            - set active branch
+
+  build-libs            - build libs for current core
+  build-compiler (b)    - build compiler for current task
+  install-compiler (i)  - install built compiler for current task
+  install-libs          - install library headers and objects for current task
+
+  open-compiler-project - open Visual Studio project for current task
+  open-toolbox          - open XYZ toolbox for current task
+  open-isdb (oi)        - open ISDB for current task/core
+  open-explorer         - start Windows Explorer in current dir
+  open-cmd              - start cmd.exe at current dir
+  open-spec             - open arch manual
+  open-compiler-help-file - open compiler guide
+
+  test-task             - open shell and setup environment for testing current task
+  run-xts               - copy all files necessary to start a XTS job (autobuild-based)
+  run-lit-tests         - run LLVM lit testsuite
+
+  copy-tools            - copy tools from another task
+  download-xts-results  - download XTS results from fileserver
+  download-xts-tools    - download XTS tools
+  download-tools-release  - download Tools tools (bintools, debugger or IDE)
+  update                - update source code
+  zip-tools (z)         - create .zip archive with tools (for XTS)
+
+Available environment variables:
+  XYZ_QUIET            - suppress popups
+  XYZ_DEBUG            - debug level
+EOF
+  return
+fi
+
+PATH=$(dirname $BASH_SOURCE)/cmds/helpers:$PATH
+
+cmd___=$(get_cmd_alias "$1")
+case "$cmd___" in
+init | set-core | set-task | unset-task | set-target | set-branch | cd)
+  if test "$BASH_SOURCE" = "$0"; then
+    echo >&2 "You should source me when using $1 (i.e. call \`. cv $@') or call \`cv init' first"
+    exit 1
+  fi
+  export PS1___="${PS1:-}"  # Ha, PS1 isn't passed by default
+  env___=$($(dirname $BASH_SOURCE)/cmds/$cmd___.sh "$@")
+  rc___=$?
+  if test $rc___ = 0; then
+    eval "$env___"
+  fi
+  unset env___
+  ;;
+help)
+  $(dirname $BASH_SOURCE)/cmds/$2.sh _ --help
+  rc___=$?
+  ;;
+*)
+  if test "$BASH_SOURCE" != "$0"; then
+    $BASH_SOURCE "$@"
+  else
+    if ! test -f $(dirname $BASH_SOURCE)/cmds/$cmd___.sh; then
+      echo >&2 "Unknown command: $1"
+      exit 1
+    fi
+    $(dirname $BASH_SOURCE)/cmds/$cmd___.sh "$@"
+  fi
+  rc___=$?
+  ;;
+esac
+unset cmd___
+
+# Remove helpers from PATH, but only if we are going to return to user code
+# (note that we can't simply restore old PATH because sub-script might have modified it).
+if ! cat /proc/$PPID/cmdline | tr '\0' '@' | grep -q '\<cv@'; then
+  PATH=$(echo "$PATH" | sed -e 's![^:]*cmds.helpers[^:]*:!!g')
+fi
+
+if test $rc___ != 0; then
+  echo >&2 FAILED
+  if test "$BASH_SOURCE" != "$0"; then
+    return $rc___
+  fi
+fi

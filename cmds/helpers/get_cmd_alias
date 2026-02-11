@@ -1,0 +1,31 @@
+#!/bin/sh
+set -eu
+case "$1" in
+b)
+  echo build-compiler
+  ;;
+s)
+  echo set-task
+  ;;
+i)
+  echo install-compiler
+  ;;
+u)
+  echo unset-task
+  ;;
+sc | st | set-core)
+  echo set-target
+  ;;
+z)
+  echo zip-tools
+  ;;
+v)
+  echo vim
+  ;;
+oi)
+  echo open-isdb
+  ;;
+*)
+  echo $1
+  ;;
+esac

@@ -1,0 +1,121 @@
+#!/usr/bin/perl
+
+# A simple cmdline analyzer for install-auto-complete.
+# It's goal is to examine command line entered by user,
+# understand which parameter needs autocompletion and
+# type of this parameter (flag, value of some flag,
+# positional, etc.).
+
+use strict;
+use warnings;
+
+use File::Basename;
+
+my $me = basename($0);
+my $dbg = $ENV{DEBUG};
+
+my $COMP_CWORD = shift @ARGV;
+$COMP_CWORD <= $#ARGV + 1 or die "COMP_CWORD too big";
+
+shift @ARGV;  # Dummy 'cv' word
+my $cmd = shift @ARGV;
+$COMP_CWORD -= 2;  # Account for 'cv cmd'
+
+my $get_cmd_alias = dirname($0) . "/get_cmd_alias $cmd";
+$cmd = `$get_cmd_alias`;
+chop $cmd;
+
+my $cmd_fname = dirname($0) . "/../$cmd.sh";
+open FILE, $cmd_fname or die "Failed to open $cmd_fname";
+my $getopt_line;
+while(<FILE>) {
+  if(/\bgetopt\b/) {
+    $getopt_line = $_;
+    last;
+  }
+}
+
+# Holds info about flags (atm only whether flag has a value)
+my %flags_info;
+
+# Parse short flags e.g.
+#   getopt -o 'p:j:h'
+if(defined $getopt_line && $getopt_line =~ / -o +['"]?([a-z:]*)['"]?( |$)/) {
+  my $shorts = $1;
+  for(my $i = 0; $i < length($shorts); ++$i) {
+    my $flag = substr($shorts, $i, 1);
+    my $val = $i < length($shorts) + 1 ? substr($shorts, $i + 1, 1) : undef;
+    if($flags_info{"-$flag"} = $val eq ':') {
+      ++$i;
+    }
+  }
+}
+
+# Parse long flags e.g.
+#   getopt --long 'branch:,no-tfs,help,llvm'
+if(defined $getopt_line && $getopt_line =~ / --long +['"]?([^'" ]*)['"]?( |$)/) {
+  my @longs = split(/,/, $1);
+  for my $flag (@longs) {
+    my $val = !!($flag =~ s/:$//);
+    $flags_info{"--$flag"} = $val;
+  }
+}
+
+if(defined $getopt_line && ! %flags_info) {
+  print STDERR "$me: failed to extract flags for $cmd\n";
+}
+
+if($dbg) {
+  for my $flag (sort keys %flags_info) {
+    print STDERR "Flag $flag: $flags_info{$flag}\n";
+  }
+  print STDERR "COMP_CWORD = $COMP_CWORD, ARGV = @ARGV\n";
+}
+
+my $pos = 0;
+for(my $i = 0; $i <= $#ARGV; ++$i) {
+  my $p = $ARGV[$i];
+  print STDERR "Analyzing parameter no. $i ($p)\n" if $dbg;
+  if($p =~ /^-/) {
+    # This is a flag but maybe incomplete
+
+    if($i == $COMP_CWORD) {
+      print STDERR "Flag\n" if $dbg;
+      print 'FLAG ?';
+      exit;
+    }
+
+    # Skip if value comes together with flag e.g. --file=my.txt
+    next if($p =~ /=/);
+
+    # Replace combination of flags with the last one (acc. to GNU conventions)
+    $p =~ s/^-.+(.)$/-$1/ if($p =~ /^-[^-]/);
+
+    if(! exists $flags_info{$p}) {
+      # Unknown flag, consider it has no value
+      print STDERR "$me: unknown flag: $p\n";
+      next;
+    }
+
+    # Skip if has no value
+    next if ! $flags_info{$p};
+
+    ++$i;
+    if($i == $COMP_CWORD) {
+      print STDERR "Value $p\n" if $dbg;
+      print "VALUE $p";
+      exit;
+    }
+  } else {
+    # This is a positional parameter
+    if($i == $COMP_CWORD) {
+      print STDERR "Positional $pos\n" if $dbg;
+      print "POSITIONAL $pos";
+      exit;
+    }
+    ++$pos;
+  }
+}
+
+# If we got here, the only possibility is a new positional parameter
+print "POSITIONAL $pos\n";

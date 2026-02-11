@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -eu
+
+check_target_set
+
+core=$(echo $XYZ_CORE | tr 'A-Z' 'a-z')
+abi=$(echo $XYZ_ABI | tr 'A-Z' 'a-z')
+
+echo xyz$core-unknown-unknown-$abi

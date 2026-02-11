@@ -1,0 +1,23 @@
+#!/bin/sh
+
+set -eu
+
+print_branch() {
+  local prefix=$1
+  local dir=$2
+
+  if test -d $dir/xyz; then
+    # Found branch
+    test -n "$prefix"
+    echo $prefix
+  elif test -d $dir; then
+    for d in $(ls -1 $dir); do
+      test -d $dir/$d || continue
+      ! test -f $dir/$d/build_libs.pl || continue
+      print_branch $prefix/$d $dir/$d | sed 's!^/!!'
+    done
+  fi
+}
+
+# TODO: nested branches names
+print_branch '' $XYZ_SOURCE/xyzx/Archive

@@ -1,0 +1,22 @@
+#!/bin/sh
+
+set -eu
+
+CORE=$(get_target_core $1)
+ABI=$(get_abi $1)
+TASK=${2:-}
+
+if test -z "$ABI"; then
+  if is_elf_task "$TASK"; then
+    ABI=ELF
+  elif is_coff_task "$TASK"; then
+    ABI=COFF
+  fi
+fi
+
+if test -z "$ABI"; then
+  echo >&2 "Failed to extract ABI from '$1'"
+  exit 1
+fi
+
+echo $CORE-$ABI

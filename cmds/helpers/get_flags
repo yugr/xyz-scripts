@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+
+# Print flags used by command.
+
+use strict;
+use warnings;
+
+use File::Basename;
+
+my $me = basename($0);
+my $dbg = $ENV{DEBUG};
+
+my $cmd_fname = dirname($0) . "/../$ARGV[0].sh";
+open FILE, $cmd_fname or exit;
+my $getopt_line;
+while(<FILE>) {
+  if(/\bgetopt\b/) {
+    $getopt_line = $_;
+    last;
+  }
+}
+
+my @flags;
+
+# Parse short flags e.g.
+#   getopt -o 'p:j:h'
+if(defined $getopt_line && $getopt_line =~ / -o +['"]?([a-z:]*)['"]?( |$)/) {
+  my $shorts = $1;
+  for(my $i = 0; $i < length($shorts); ++$i) {
+    my $flag = substr($shorts, $i, 1);
+    print STDERR "Adding flag $flag\n" if $dbg;
+    push @flags, "-$flag";
+    if(($i < length($shorts) + 1 ? substr($shorts, $i + 1, 1) : undef) eq ':') {
+      ++$i;
+    }
+  }
+}
+
+# Parse long flags e.g.
+#   getopt --long 'branch:,no-tfs,help,llvm'
+if(defined $getopt_line && $getopt_line =~ / --long +['"]?([^'" ]*)['"]?( |$)/) {
+  my @longs = split(/,/, $1);
+  for my $flag (@longs) {
+    $flag =~ s/:$//;
+    print STDERR "Adding flag $flag\n" if $dbg;
+    push @flags, "--$flag";
+  }
+}
+
+print "@flags ";

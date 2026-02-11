@@ -1,0 +1,30 @@
+#!/bin/sh
+
+set -eu
+
+CORE=$(echo $1 | sed 's/^xyz//i' | tr 'a-z' 'A-Z')
+
+case $CORE in
+P4210 | 4210)
+  CORE=P4000
+  ;;
+4500 | P45 | 45)
+  CORE=P4500
+  ;;
+12 | 16)
+  CORE=P12
+  ;;
+QQ)
+  CORE=Q4
+  ;;
+R2V2 | RV2)
+  CORE=R22
+  ;;
+S)
+  CORE=S2
+  ;;
+R)
+  CORE=R2
+esac
+
+echo $CORE

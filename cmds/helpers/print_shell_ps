@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+# This will replace "\nXXX\$" in prompt with "\nTASK \$" (not too generic but enough for me)
+echo "export PS1=\$(echo '$PS1___' | sed '"'s![\]n[^\]*[\]\$!\\n'"$1"'\\$!'\'') ;'

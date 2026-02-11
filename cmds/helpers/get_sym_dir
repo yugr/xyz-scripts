@@ -1,0 +1,111 @@
+#!/bin/sh
+
+set -eu
+source set_paths
+
+TARGETS='source (s, sourcedir, src, srcdir); build (b, builddir); work (workdir, wdir, task, taskdir); install (i, installdir); test (testdir, qa, qadir); xts (xtsdir, xts-run); libs (lib, libdir); isdb (isdbdir); XYZ_DEV; mytarget (MYTARGET); codegen (cg); mytarget-build (targb); llvm; clang; dev_git (devgit); libc'
+
+WHERE=${1:=}
+WHERE=$(echo $WHERE | tr 'A-Z' 'a-z')
+
+COMMON=/cygdrive/c/workspaces/Common/XYZ_DEV
+
+check_llvm_task() {
+  if ! is_llvm_task $XYZ_TASK; then
+    echo >&2 "Not an LLVM task"
+    exit 1
+  fi
+}
+
+case $WHERE in
+dev_git | devgit)
+  DIR=$XYZ_LLVM_SOURCE/XPLAY_LLVM
+  ;;
+s | source | src | sourcedir | srcdir)
+  check_task_set
+  if is_llvm_task $XYZ_TASK; then
+    DIR=$XYZ_LLVM_SOURCE
+  else
+    DIR=$XYZ_O64_SOURCE
+  fi
+  ;;
+isdb | isdbdir)
+  check_task_set
+  DIR=$XYZ_LLVM_SOURCE/llvm/lib/Target/MYTARGET/ISDB
+  ;;
+b | build | builddir)
+  check_task_set
+  if is_llvm_task $XYZ_TASK; then
+    if test -n "${NINJA:-}"; then
+      DIR=$XYZ_LLVM_SOURCE/build-ninja-$NINJA
+    else
+      DIR=$XYZ_LLVM_BUILD
+    fi
+  else
+    DIR=$XYZ_O64_BUILD
+  fi
+  ;;
+work | workdir | wdir | task | taskdir)
+  check_task_set
+  DIR=$XYZ_WDIR
+  ;;
+i | install | installdir)
+  check_task_set
+  check_target_set
+  DIR=$XYZ_INSTALL
+  ;;
+test | testdir | qa | qadir)
+  DIR=$XYZ_QA_COMPILER/tests
+  ;;
+xts | xtsdir | xts-run)
+  DIR=$XYZ_XTS_USERS_ROOT/$USER/xts_runs/$XYZ_TASK
+  ;;
+libs | lib | libdir)
+  check_task_set
+  if is_llvm_task $XYZ_TASK; then
+    DIR=$XYZ_LLVM_SOURCE
+  else
+    DIR=$XYZ_O64_LIBS
+  fi
+  ;;
+libc)
+  check_task_set
+  if is_llvm_task $XYZ_TASK; then
+    DIR=$XYZ_LLVM_SOURCE/libc
+  else
+    DIR=$XYZ_O64_LIBS
+  fi
+  ;;
+XYZ_DEV)
+  DIR=$XYZ_TOOLS_COMMON/..
+  ;;
+mytarget | MYTARGET)
+  check_llvm_task_set
+  DIR=$XYZ_LLVM_SOURCE/llvm/lib/Target/MYTARGET
+  ;;
+codegen | cg)
+  check_llvm_task_set
+  DIR=$XYZ_LLVM_SOURCE/llvm/lib/Codegen
+  ;;
+mytarget-build | targb)
+  check_llvm_task_set
+  if test -n "${NINJA:-}"; then
+    DIR=$XYZ_LLVM_SOURCE/build-ninja-$NINJA/src/llvm/lib/Target/MYTARGET
+  else
+    DIR=$XYZ_LLVM_BUILD/src/llvm/lib/Target/MYTARGET
+  fi
+  ;;
+llvm)
+  check_llvm_task_set
+  DIR=$XYZ_LLVM_SOURCE/llvm
+  ;;
+clang)
+  check_llvm_task_set
+  DIR=$XYZ_LLVM_SOURCE/clang
+  ;;
+*)
+  exit 1
+  ;;
+esac
+
+echo $DIR

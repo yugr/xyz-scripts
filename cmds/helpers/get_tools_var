@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -eu
+
+CORE=$(get_core $1)
+
+case $CORE in
+P*)
+  echo XYZPTOOLS
+  ;;
+R1 | R2 | R21 | R22 | S1 | S2)
+  echo XYZRTOOLS
+  ;;
+Q4)
+  echo Q4TOOLS
+  ;;
+Q6)
+  echo XYZQTOOLS
+  ;;
+*)
+  cat >&2 <<EOF
+error: unknown core: $CORE
+
+Supported cores: P4000 (P4210), P4500, P12, P5, R2, S2 (R22), Q4 (QQ), Q6
+EOF
+  exit 1
+esac
+

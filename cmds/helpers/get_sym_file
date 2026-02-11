@@ -1,0 +1,64 @@
+#!/bin/sh
+
+set -eu
+source set_paths
+
+TARGETS='InstrInfoExtV1 (InstrInfoExt); ScheduleExtV1 (ScheduleExt, SchedExtV1, SchedExt); GenRegisterInfo (GenRegInfo); GenInstrInfo; GenDAGISel; GenEncodingInfoV1 (GenEnc, GenEncod, GenEncoding, GenEncodingInfo)'
+
+WHAT=${1:=}
+WHAT=$(echo $WHAT | tr 'A-Z' 'a-z')
+
+if test -n "${XYZ_CORE:-}"; then
+  case $XYZ_CORE in
+  S*)
+    PREFIX=S
+    ;;
+  R[0-9])
+    PREFIX=R
+    ;;
+  *)
+    PREFIX=$XYZ_CORE
+    ;;
+  esac
+fi
+
+get_mytarget_build_file() {
+  check_task_set
+  check_llvm_task_set
+  echo $(get_sym_dir mytarget-build)/$1
+}
+
+case $WHAT in
+instrinfoextv1 | instrinfoext)
+  check_target_set
+  FILE=$(get_mytarget_build_file ${PREFIX}InstrInfoExtV1.td)
+  ;;
+schedextv1 | scheduleextv1 | schedext | scheduleext)
+  check_target_set
+  FILE=$(get_mytarget_build_file ${PREFIX}ScheduleExtV1.td)
+  ;;
+genregisterinfo | genreginfo)
+  FILE=$(get_mytarget_build_file MYTARGETGenRegisterInfo.inc)
+  ;;
+geninstrinfo)
+  FILE=$(get_mytarget_build_file MYTARGETGenInstrInfo.inc)
+  ;;
+gendagisel)
+  FILE=$(get_mytarget_build_file MYTARGETGenDAGISel.inc)
+  ;;
+genenc | genencod | genencoding | genencodinginfo | genencodinginfov1)
+  check_target_set
+  FILE=$(get_mytarget_build_file ${PREFIX}GenEncodingV1.inc)
+  ;;
+build.ninja)
+  check_task_set
+  check_llvm_task_set
+  DIR=$(get_sym_dir build)
+  FILE=$DIR/build.ninja
+  ;;
+*)
+  exit 1
+  ;;
+esac
+
+echo $FILE

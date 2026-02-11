@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# TODO: move XYZ_INSTALL_ROOT to c:\TempTools to match e.bat?
+
+XYZ_HELPERS=$(dirname $(which cv))/cmds/helpers
+XYZ_INSTALL_ROOT=$HOME/tools
+XYZ_TFS_ROOT='/cygdrive/c/workspaces'
+XYZ_LLVM_ROOT=$HOME/XPLAY
+XYZ_LLVM_REFTOOLS=$XYZ_INSTALL_ROOT/XPLAY-reftools-20180212
+XYZ_GIT_SERVER='http://server/tfs/DefaultCollection/XPLAY_LLVM/_git'
+#XYZ_TFS_SERVER=/server:http://codefront:8080/tfs  This puzzles MSVS because does not match *.vcproj
+XYZ_TFS_SERVER='/collection:http://codefront:8080/tfs/defaultcollection'
+MSVS10='/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 10.0/Common7/IDE'
+MSVS14='/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 14.0/Common7/IDE'
+MSVS15='/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Professional/Common7/IDE'
+MSVS16='/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2019/Professional/Common7/IDE'
+XYZ_TOOLS_COMMON='/cygdrive/c/workspaces/Common/XYZ_DEV/Tools'
+XYZ_QA_COMPILER=$XYZ_TOOLS_COMMON/QA/Tests/Compiler
+XYZ_WDIR_ROOT=$HOME/tasks
+XYZ_XTS_USERS_ROOT_OLD='/cygdrive/q/Tools/users'
+XYZ_XTS_USERS_ROOT='/cygdrive/y/users'
+XYZ_XTS_XPLAY_ROOT='//xplay_server/runs'
+XYZ_XTS_ROOT_OLD='/cygdrive/q/Tools/XTS_tests_run'
+XYZ_PYXTS='/cygdrive/y/pyxts_n'
+XYZ_XTS_ROOT='/cygdrive/y/XTS_tests_run/Compiler'
+XYZ_AUTOBUILD_ROOT=/cygdrive/q/tools/PreRelease/builds/compiler
+XYZ_COMPILE_AND_TEST_JOB_ROOT=/cygdrive/y/users/$USER
+XYZ_PUSH_JOB_ROOT=/cygdrive/y/XTS_tests_run/Compiler/LLVM
+SRV=tools-srv4
+JENKINS=http://1.2.3.4:8080

@@ -1,0 +1,18 @@
+#!/bin/sh
+
+set -eu
+
+if test -z "${XYZ_TASK:-}"; then
+  cat >&2 <<EOF
+error: no task set, please run \`cv set-task ...'
+
+The list of current tasks:
+`print_tasks`
+EOF
+  exit 1
+fi
+
+if ! is_llvm_task "$XYZ_TASK"; then
+  echo >&2 "error: $XYZ_TASK is not an LLVM task"
+  exit 1
+fi

@@ -1,0 +1,6 @@
+#!/bin/sh
+
+set -eu
+
+# Remove tools from PATH to avoid side-effects
+echo "$PATH" | sed 's![^:]*\/\(XYZ-\|xyztools\)[^:]*:!!g'

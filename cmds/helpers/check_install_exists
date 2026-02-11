@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -eu
+source set_paths
+
+if test ! -d "$XYZ_INSTALL"; then
+  echo >&2 "error: base toolchain does not exist at $XYZ_INSTALL (`cygpath -w $XYZ_INSTALL`), please install it using \`cv copy-tools' or just copy from $XYZ_XTS_ROOT (`cygpath -w $XYZ_XTS_ROOT`)"
+  exit 1
+fi
+

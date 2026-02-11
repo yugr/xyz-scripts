@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+if test -z "${XYZ_TARGET:-}"; then
+  echo >&2 "error: no target set, please run \`cv set-target ...'"
+  exit 1
+fi

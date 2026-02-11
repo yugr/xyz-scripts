@@ -1,0 +1,28 @@
+#!/bin/sh
+
+set -eu
+
+TASK="$1"
+CORE="$2"
+
+source set_paths
+
+case $CORE in
+P4000 | P4500 | P5)
+  echo XYZ-P
+  ;;
+P12)
+  # Older P12 used "XYZ-P"
+  if ! test -d $XYZ_INSTALL_ROOT/$TASK/$CORE/XYZ-P; then
+    echo XYZ-P12
+  else
+    echo XYZ-P
+  fi
+  ;;
+R1 | R2 | R21 | R22 | S1 | S2)
+  echo XYZ-R
+  ;;
+*)
+  echo XYZ-$CORE
+  ;;
+esac

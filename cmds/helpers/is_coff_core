@@ -1,0 +1,11 @@
+#!/bin/sh
+set -eu
+CORE=$(get_target_core $1)
+case $CORE in
+P400 | P4500 | P12 | P5)
+  exit 0
+  ;;
+*)
+  exit 1
+  ;;
+esac

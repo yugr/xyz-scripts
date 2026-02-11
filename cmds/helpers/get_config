@@ -1,0 +1,30 @@
+#!/bin/sh
+
+set -eu
+
+configs='Debug debug d Release release r RelWithDebInfo relwithdebinfo rd MinSizeRel minsizerel minrel mr'
+
+if test $# = 0; then
+  echo $configs
+  exit
+fi
+
+CFG=$(echo "$1" | tr 'A-Z' 'a-z')
+
+case $CFG in
+rel | release | r)
+  echo Release
+  ;;
+dbg | debug | d)
+  echo Debug
+  ;;
+reldeb | reldbg | regdbg | relwithdebinfo | rd)  # LLVM
+  echo RelWithDebInfo
+  ;;
+minrel | minsizerel | mr)  # LLVM
+  echo MinSizeRel
+  ;;
+*)
+  echo >&2 "Unknown config: $1 (valid configs are $configs)"
+  exit 1
+esac

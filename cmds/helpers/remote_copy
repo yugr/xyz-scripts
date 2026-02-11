@@ -1,0 +1,16 @@
+#/bin/sh
+# Fast copy through remote server
+
+set -eu
+
+SRC=$1
+DST=$2
+
+SRV=tools-srv4
+
+LINUX_SRC=$(get_linux_path $SRC)
+LINUX_DST=$(get_linux_path $DST)
+
+# Chdir necessary to inform Linux of recently created folders
+ssh -o 'BatchMode yes' $SRV "cd $LINUX_SRC && cd $LINUX_DST && cp -rT $LINUX_SRC $LINUX_DST && chmod -R a+rwx $LINUX_DST || (echo >&2 'COPY FAILED' && exit 1)"
+

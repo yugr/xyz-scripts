@@ -1,0 +1,14 @@
+#!/bin/sh
+# Remove Cygwin's stuff from PATH to force Perl from TFS
+
+set -eu
+
+#echo $PATH | sed -e 's!/\(usr\|bin\)[^:]*:\?!!g'
+IFS=:
+NEWPATH=
+for d in $PATH; do
+  if echo $d | grep -qv '^/\(usr\|bin\)'; then
+    NEWPATH=${NEWPATH:+$NEWPATH:}$d
+  fi
+done
+echo "$NEWPATH"
