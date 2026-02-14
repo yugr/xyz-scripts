@@ -5,7 +5,7 @@ shift
 source set_paths
 
 usage_short() {
-  CMD=$(basename $0 | sed 's/\.sh$//')
+  CMD=$(basename $0 .sh)
   cat >&2 <<EOF
 Usage: cv download-tools-release [OPT] path/to/tools [core]
 For more info run \`cv help $CMD'

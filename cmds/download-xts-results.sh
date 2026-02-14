@@ -9,7 +9,7 @@ shift
 source set_paths
 
 usage_short() {
-  CMD=$(basename $0 | sed 's/\.sh$//')
+  CMD=$(basename $0 .sh)
   cat >&2 <<EOF
 Usage: cv download-xts-results [OPT]... BASE-BUILD [CORE]...
 For more info run \`cv help $CMD'

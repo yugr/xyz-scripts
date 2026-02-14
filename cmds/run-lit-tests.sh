@@ -7,7 +7,7 @@ source set_paths
 OPT=3
 
 usage_short() {
-  CMD=$(basename $0 | sed 's/\.sh$//')
+  CMD=$(basename $0 .sh)
   cat >&2 <<EOF
 Usage: cv run-lit-tests [OPT]... CFG [-- LIT-OPT...]
 For more info run \`cv help $CMD'

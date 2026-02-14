@@ -7,7 +7,7 @@ source set_paths
 check_tfs_tools
 
 usage_short() {
-  CMD=$(basename $0 | sed 's/\.sh$//')
+  CMD=$(basename $0 .sh)
   cat >&2 <<EOF
 Usage: cv remove-task [OPT]... [TASK]...
 For more info run \`cv help $CMD'
