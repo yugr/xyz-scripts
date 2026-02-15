@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 set -eu
 
 CORE=$(echo $1 | sed 's/^xyz//i' | tr 'a-z' 'A-Z')

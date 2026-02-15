@@ -1,5 +1,10 @@
 #!/bin/bash -eu
 
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 # This is a simple automation tools for common tasks that we do in XYZ.
 # To use, install Cygwin and TFPT and add tf.exe and tfpt.exe to system PATH.
 # Run `source cv init' from within Cygwin and start using!

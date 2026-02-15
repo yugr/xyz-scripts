@@ -1,4 +1,10 @@
 #!/bin/sh
+
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 set -eu
 if test -z "${XYZ_TARGET:-}"; then
   echo >&2 "error: no target set, please run \`cv set-target ...'"

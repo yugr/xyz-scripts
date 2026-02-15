@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 set -eu
 
 if is_llvm_task $XYZ_TASK && test $1 = RelWithDebInfo -o $1 = MinSizeRel; then

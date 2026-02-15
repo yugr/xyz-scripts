@@ -1,3 +1,8 @@
+rem Copyright 2026 Yury Gribov
+rem 
+rem Use of this source code is governed by MIT license that can be
+rem found in the LICENSE.txt file.
+
 %~dp0/cmake_vcvars.bat ^
   -G Ninja -DCMAKE_C_COMPILER=cl.exe -DCMAKE_CXX_COMPILER=cl.exe -DCMAKE_BUILD_TYPE=%CFG% ^
   -DCMAKE_VERBOSE_MAKEFILE=ON ^

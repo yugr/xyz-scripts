@@ -1,5 +1,10 @@
 #!python3
 
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 import os
 import sys
 import tempfile

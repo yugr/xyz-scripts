@@ -1,3 +1,8 @@
+rem Copyright 2026 Yury Gribov
+rem 
+rem Use of this source code is governed by MIT license that can be
+rem found in the LICENSE.txt file.
+
 set VSINSTALLDIR=
 set VSCMD_SKIP_SENDTELEMETRY=1
 

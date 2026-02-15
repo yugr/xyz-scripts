@@ -1,3 +1,8 @@
+rem Copyright 2026 Yury Gribov
+rem 
+rem Use of this source code is governed by MIT license that can be
+rem found in the LICENSE.txt file.
+
 rem TODO: LLVM_ENABLE_EXPENSIVE_CHECKS=ON
 rem -G "Visual Studio 14 2015 Win64"
 rem -G "Visual Studio 15 2017 Win64" ^

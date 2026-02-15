@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 # A simple cmdline analyzer for install-auto-complete.
 # It's goal is to examine command line entered by user,
 # understand which parameter needs autocompletion and

@@ -1,4 +1,11 @@
 #!/bin/sh
+
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 set -eu
+
 source set_paths
 is_llvm_task $1 || (ls -1 $XYZ_INSTALL_ROOT/$1 | grep -q COFF)

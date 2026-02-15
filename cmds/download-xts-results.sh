@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 # This should work for XTS v349+
 # Older layouts can be supported as well, if necessary.
 

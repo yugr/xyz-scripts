@@ -1,3 +1,8 @@
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 cat <<EOF
 unset XYZ_INSTALL ;
 unset XYZPTOOLS XYZP12TOOLS XYZRTOOLS Q4TOOLS XYZQTOOLS XYZQ6TOOLS Q6TOOLS ;

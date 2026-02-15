@@ -1,5 +1,12 @@
 #!/bin/sh
+
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 set -eu
+
 # Extract possible names from case statement inside cd.sh
 grep 'TARGETS=' $(dirname $0)/get_sym_file \
   | sed "s/.*TARGETS='\\(.*\\)'$/\\1/" \

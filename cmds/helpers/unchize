@@ -1,4 +1,10 @@
 #!/bin/sh
-set -eu
-echo "$1" | sed 's!\/cygdrive\/q\/!//fileserver/!; s![qQ]:\\!\\\\fileserver\\!'
 
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
+set -eu
+
+echo "$1" | sed 's!\/cygdrive\/q\/!//fileserver/!; s![qQ]:\\!\\\\fileserver\\!'

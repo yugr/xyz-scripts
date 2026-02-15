@@ -1,5 +1,12 @@
 #!/bin/sh
+
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 set -eu
+
 CORE=$(get_target_core $1)
 case "$CORE" in
 R2[12] | S[12] | Q8 | P16)

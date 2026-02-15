@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Copyright 2026 Yury Gribov
+#▫
+# Use of this source code is governed by MIT license that can be
+# found in the LICENSE.txt file.
+
 if test "$1" = DODODO; then
   _XYZAutoComplete () {
     local helpers=$(dirname $BASH_SOURCE)/helpers
