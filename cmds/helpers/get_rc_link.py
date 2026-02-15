@@ -133,7 +133,7 @@ def main():
       retry_period = 15
       warn("%s is inaccessible, retrying in %d seconds..." % (xls_name, retry_period))
       time.sleep(retry_period)
-  atexit.register(lambda xls_name=temp_xls_name: os.unlink(temp_xls_name))
+  atexit.register(lambda: os.unlink(temp_xls_name))
 
   wb = openpyxl.load_workbook(temp_xls_name)
 
